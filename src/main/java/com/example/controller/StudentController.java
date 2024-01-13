@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.entity.Student;
+import com.example.dto.StudentDto;
 import com.example.service.StudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,28 +16,28 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        Student savedStudent = studentService.createStudent(student);
+    public ResponseEntity<StudentDto> createStudent(@RequestBody StudentDto student) {
+        StudentDto savedStudent = studentService.createStudent(student);
         return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable("id") Long studentId) {
-        Student student = studentService.getStudentById(studentId);
+    public ResponseEntity<StudentDto> getStudentById(@PathVariable("id") Long studentId) {
+        StudentDto student = studentService.getStudentById(studentId);
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List> getAllStudent() {
-        List<Student> students = studentService.getAllStudents();
+    public ResponseEntity<List<StudentDto>> getAllStudent() {
+        List<StudentDto> students = studentService.getAllStudents();
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable("id") Long studentId,
-                                           @RequestBody Student student) {
+    public ResponseEntity<StudentDto> updateStudent(@PathVariable("id") Long studentId,
+                                           @RequestBody StudentDto student) {
         student.setId(studentId);
-        Student updatedStudent = studentService.updateStudent(student);
+        StudentDto updatedStudent = studentService.updateStudent(student);
         return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
     }
 

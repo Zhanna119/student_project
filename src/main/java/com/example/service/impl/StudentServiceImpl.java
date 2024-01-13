@@ -1,6 +1,8 @@
 package com.example.service.impl;
 
+import com.example.dto.StudentDto;
 import com.example.entity.Student;
+import com.example.mapper.StudentMapper;
 import com.example.repository.StudentRepository;
 import com.example.service.StudentService;
 import lombok.AllArgsConstructor;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -16,29 +19,35 @@ public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
 
     @Override
-    public Student createStudent(Student student) {
-        return studentRepository.save(student);
+    public StudentDto createStudent(StudentDto studentDto) {
+        Student student = StudentMapper.mapToStudent(studentDto);
+        Student savedStudent = studentRepository.save(student);
+        StudentDto savedStudentDto = StudentMapper.mapToStudentDto(savedStudent);
+        return savedStudentDto;
     }
 
     @Override
-    public Student getStudentById(Long studentId) {
+    public StudentDto getStudentById(Long studentId) {
         Optional<Student> optionalStudent = studentRepository.findById(studentId);
-        return optionalStudent.get();
+        Student student = optionalStudent.get();
+        return StudentMapper.mapToStudentDto(student);
     }
 
     @Override
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public List<StudentDto> getAllStudents() {
+        List<Student> students = studentRepository.findAll();
+        return students.stream().map(StudentMapper::mapToStudentDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Student updateStudent(Student student) {
+    public StudentDto updateStudent(StudentDto student) {
         Student existingStudent = studentRepository.findById(student.getId()).get();
         existingStudent.setFirstName(student.getFirstName());
         existingStudent.setLastName(student.getLastName());
         existingStudent.setEmail(student.getEmail());
         Student updatedStudent = studentRepository.save(existingStudent);
-        return updatedStudent;
+        return StudentMapper.mapToStudentDto(updatedStudent);
     }
 
     @Override
