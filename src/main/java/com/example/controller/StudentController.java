@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.dto.StudentDto;
 import com.example.service.StudentService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping
-    public ResponseEntity<StudentDto> createStudent(@RequestBody StudentDto student) {
+    public ResponseEntity<StudentDto> createStudent(@Valid @RequestBody StudentDto student) {
         StudentDto savedStudent = studentService.createStudent(student);
         return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
     }
@@ -35,7 +36,7 @@ public class StudentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<StudentDto> updateStudent(@PathVariable("id") Long studentId,
-                                           @RequestBody StudentDto student) {
+                                           @RequestBody @Valid StudentDto student) {
         student.setId(studentId);
         StudentDto updatedStudent = studentService.updateStudent(student);
         return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
