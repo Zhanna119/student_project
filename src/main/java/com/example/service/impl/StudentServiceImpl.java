@@ -24,9 +24,6 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    @Autowired
-    private StudentMapper mapper;
-
     @Override
     public StudentDto createStudent(StudentDto studentDto) {
         log.info("Saving new student");
